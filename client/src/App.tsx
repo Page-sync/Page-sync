@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import interfaces
 import { User } from "./globals";
 
 //import components
 import PDFViewer from "./components/PDFViewer";
+import Library from "./components/Library";
+
 //import style
 import "./App.css";
 
@@ -15,14 +18,15 @@ function App() {
     setPdfUrl(testUrl);
   }, [pdfUrl]);
   return (
-    <>
-      <p>helloworld</p>
-      <div>
-        <PDFViewer
-          url={pdfUrl ? pdfUrl : `../public/Lorem_ipsum.pdf`}
-        ></PDFViewer>
-      </div>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Library />}></Route>
+        <Route
+          path="/book/:bookId"
+          element={<PDFViewer url={testUrl} />}
+        ></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
