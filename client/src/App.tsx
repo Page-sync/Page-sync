@@ -6,7 +6,7 @@ import { User, BookInfo } from "./globals";
 //import components
 import PDFViewer from "./components/PDFViewer";
 import Library from "./components/Library";
-import NoteArea from "./components/NoteArea";
+import UserInfo from "./components/UserInfo";
 
 //import style
 import "./App.css";
@@ -20,16 +20,15 @@ function App() {
     // pdf url depend on book card be clicked
   }, [pdfUrl]);
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Library setPdfUrl={setPdfUrl} />}></Route>
-        <Route
-          path="/book"
-          // the hard coded url works, but if i use pdfUrl which will be set in bookCard in onClick event, it will apprear as undefined
-          element={<PDFViewer />}
-        ></Route>
-      </Routes>
-    </BrowserRouter>
+    <div className="h-screen w-full flex">
+      <BrowserRouter>
+        <UserInfo></UserInfo>
+        <Routes>
+          <Route path="/" element={<Library setPdfUrl={setPdfUrl} />}></Route>
+          <Route path="/book" element={<PDFViewer />}></Route>
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 

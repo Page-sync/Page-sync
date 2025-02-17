@@ -1,5 +1,14 @@
 import { useState } from "react";
 import { NoteInfo } from "../globals";
+import { Button } from "./ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 interface NoteCardProps {
   // use NoteInfo
   noteInfo: NoteInfo;
@@ -15,18 +24,20 @@ const NoteCard: React.FC<NoteCardProps> = ({
   const editable = true;
   return (
     <>
-      <title className="note-title">Default note title</title>
-      <div>{noteInfo.content}</div>
-      {editable && (
-        <button
-          onClick={() => {
-            setEditNote(noteInfo);
-            setView("singleNote");
-          }}
-        >
-          Edit
-        </button>
-      )}
+      <Card>
+        <CardTitle>Note</CardTitle>
+        <CardContent>{noteInfo.content}</CardContent>
+        {editable && (
+          <Button
+            onClick={() => {
+              setEditNote(noteInfo);
+              setView("singleNote");
+            }}
+          >
+            Edit
+          </Button>
+        )}
+      </Card>
     </>
   );
 };

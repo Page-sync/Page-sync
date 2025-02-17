@@ -2,7 +2,18 @@ import { useEffect, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 // import component
 import NoteArea from "./NoteArea";
-
+// import css component
+import { Card } from "./ui/card";
+import { Button } from "./ui/button";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Settings,
+  ZoomIn,
+  ZoomOut,
+  RotateCw,
+  Search,
+} from "lucide-react";
 //import pdfjs
 import * as pdfjsLib from "pdfjs-dist";
 import { PDFDocumentProxy } from "pdfjs-dist";
@@ -94,83 +105,111 @@ const PDFViewer: React.FC<PDFViewerProps> = ({}) => {
     }
   };
   const changeZoom = async (delta: number) => {
-    setZoomLevel((prevzoomLevel) => {
-      const newZoomLevel = Math.max(0.25, Math.min(5, prevzoomLevel + delta));
-      return newZoomLevel;
-    });
+    const newZoomLevel = Math.max(0.25, Math.min(5, zoomLevel + delta));
+    setZoomLevel(newZoomLevel);
   };
 
   return (
     <>
-      <p>PDFViewer</p>
-      {loading ? (
-        <div>Loading PDF</div>
-      ) : error ? (
-        <div>{error}</div>
-      ) : (
-        <div className="pdfviewer">
-          <div className="canvas-container">
-            <canvas ref={canvasRef} className="pdf-display"></canvas>
-          </div>
-          {pdfDoc && (
-            <div className="panle">
-              {/* change page */}
-              <div className="page-panle">
-                <button
-                  onClick={() => {
+      <div className="flex-1 flex flex-row">
+        <div className="flex-1 flex flex-col">
+          {/* PDFViewer */}
+          {/* Top bar: */}
+          <div className="h-16 border-b flex items-center justify-between px-4">
+            {/* Page */}
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => {
+                  if (pdfDoc) {
                     changePage(-1);
-                  }}
-                  className="panle-btn"
-                >
-                  Previous
-                </button>
-                <span className="page-info">
+                  }
+                }}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              {pdfDoc ? (
+                <span>
                   Page {currentPage} / {pdfDoc.numPages}
                 </span>
-                <button
-                  onClick={() => {
-                    changePage(1);
-                  }}
-                  className="panle-btn"
-                >
-                  Next
-                </button>
-              </div>
-              {/* zoom */}
-              <div className="zoom-panle">
-                <button
-                  onClick={() => {
-                    changeZoom(-0.25);
-                  }}
-                  className="panle-btn"
-                >
-                  Zoom Out
-                </button>
-                <span className="zoom-info">
-                  {Math.round(zoomLevel * 100)}%
+              ) : (
+                <span>
+                  Page {0} / {0}
                 </span>
-                <button
-                  onClick={() => {
-                    changeZoom(0.25);
-                  }}
-                  className="panle-btn"
-                >
-                  Zoom In
-                </button>
-                <button
-                  onClick={() => {
-                    setZoomLevel(1);
-                  }}
-                  className="panle-btn"
-                >
-                  Reset Zoom
-                </button>
-              </div>
+              )}
+
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => {
+                  if (pdfDoc) {
+                    changePage(1);
+                  }
+                }}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
             </div>
-          )}
+
+            {/* Zoom */}
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => {
+                  if (pdfDoc) {
+                    changeZoom(-0.25);
+                  }
+                }}
+              >
+                <ZoomOut className="h-4 w-4" />
+              </Button>
+
+              <span>{Math.round(zoomLevel * 100)}%</span>
+
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => {
+                  if (pdfDoc) {
+                    changeZoom(0.25);
+                  }
+                }}
+              >
+                <ZoomIn className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          <div className="w-full h-full flex items-center justify-center text-gray-400">
+            <Card className="max-w-4xl mx-auto h-full bg-white shadow-lg">
+              <div
+                className="
+                w-full
+                h-full
+                flex
+                items-center
+                justify-center
+                text-gray-400"
+              >
+                {loading ? (
+                  <div>Loading PDF</div>
+                ) : error ? (
+                  <div>{error}</div>
+                ) : (
+                  <canvas ref={canvasRef} className="pdf-display"></canvas>
+                )}
+              </div>
+            </Card>
+          </div>
         </div>
-      )}
-      <NoteArea currentPage={currentPage} bookId={Number(bookId)}></NoteArea>
+        <div className="w-64 border-l bg-white p-4">
+          <NoteArea
+            currentPage={currentPage}
+            bookId={Number(bookId)}
+          ></NoteArea>
+        </div>
+      </div>
     </>
   );
 };

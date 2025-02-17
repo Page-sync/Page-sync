@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { NoteInfo } from "../globals";
+import { Textarea } from "./ui/textarea";
+import { Button } from "./ui/button";
 interface SingleNoteProps {
   // use NoteInfo
   setView: Function;
@@ -20,7 +22,7 @@ const SingleNote: React.FC<SingleNoteProps> = ({
   return (
     <>
       <div>
-        <textarea
+        <Textarea
           className="note-content"
           id="input-note-content"
           value={editNote?.content}
@@ -30,13 +32,13 @@ const SingleNote: React.FC<SingleNoteProps> = ({
             });
           }}
         />
-        <button
+        <Button
           onClick={() => {
             setView("allNote");
           }}
         >
           Close
-        </button>
+        </Button>
       </div>
     </>
   );

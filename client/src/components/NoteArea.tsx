@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { NoteInfo } from "../globals";
 import NoteCard from "./NoteCard";
 import SingleNote from "./SingleNote";
+import { Button } from "./ui/button";
+
 interface NoteAreaProps {
   // use NoteInfo
   currentPage: number;
@@ -37,39 +39,47 @@ const NoteArea: React.FC<NoteAreaProps> = ({ currentPage, bookId }) => {
   }, [currentPage]);
   return (
     <>
-      <div>All Notes</div>
+      <div>
+        All Notes
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold">Properties</h2>
+          <div className="space-y-2">
+            {view === "allNote" && (
+              <div>
+                <Button
+                  className=""
+                  onClick={() => {
+                    setView("singleNote");
+                  }}
+                >
+                  Add Note
+                </Button>
+                <div className="all-note-container">
+                  {notes &&
+                    notes.map((note, idx) => {
+                      return (
+                        <NoteCard
+                          key={idx}
+                          noteInfo={note}
+                          setView={setView}
+                          setEditNote={setEditNote}
+                        ></NoteCard>
+                      );
+                    })}
+                </div>
+              </div>
+            )}
 
-      {view === "allNote" && (
-        <div>
-          <button
-            onClick={() => {
-              setView("singleNote");
-            }}
-          >
-            Add Note
-          </button>
-          <div className="all-note-container">
-            {notes &&
-              notes.map((note, idx) => {
-                return (
-                  <NoteCard
-                    key={idx}
-                    noteInfo={note}
-                    setView={setView}
-                    setEditNote={setEditNote}
-                  ></NoteCard>
-                );
-              })}
+            {view === "singleNote" && (
+              <SingleNote
+                setView={setView}
+                editNote={editNote}
+                setEditNote={setEditNote}
+              />
+            )}
           </div>
         </div>
-      )}
-      {view === "singleNote" && (
-        <SingleNote
-          setView={setView}
-          editNote={editNote}
-          setEditNote={setEditNote}
-        />
-      )}
+      </div>
     </>
   );
 };
