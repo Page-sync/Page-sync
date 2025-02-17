@@ -1,16 +1,28 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { BookInfo } from "../globals";
 interface BookCardProps {
   // use BookInfo
+  bookInfo: BookInfo;
 }
-const BookCard: React.FC<BookCardProps> = ({}) => {
+const BookCard: React.FC<BookCardProps> = ({ bookInfo }) => {
+  const clickRef = useRef(null);
+
+  const encodeBookdUrl = encodeURIComponent(bookInfo.url);
   return (
-    <>
+    <div className="bookcard">
       BookName
-      <a href="/book/1" target="_blank" rel="noopener  noreferrer">
-        Open the book
+      <a
+        ref={clickRef}
+        href={`/book/?url=${encodeBookdUrl}&bookid=${bookInfo.id}`}
+        target="_blank"
+        rel="noopener  noreferrer"
+        onClick={() => {
+          console.log(bookInfo);
+        }}
+      >
+        <button>Open the book</button>
       </a>
-    </>
+    </div>
   );
 };
 export default BookCard;

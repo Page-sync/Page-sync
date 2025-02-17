@@ -1,19 +1,23 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
+// import component
+import NoteArea from "./NoteArea";
+
 //import pdfjs
 import * as pdfjsLib from "pdfjs-dist";
 import { PDFDocumentProxy } from "pdfjs-dist";
 //import worker config file
 import { initializePDFWorker } from "../lib/pdf.worker";
 initializePDFWorker();
-interface PDFViewerProps {
-  url: string;
-}
+interface PDFViewerProps {}
 
-const PDFViewer: React.FC<PDFViewerProps> = ({ url }) => {
-  const { bookId } = useParams();
+const PDFViewer: React.FC<PDFViewerProps> = ({}) => {
+  const [searchParams] = useSearchParams();
+  const bookUrl = searchParams.get("url");
+  const bookId = searchParams.get("bookid");
   // canvas emelent used for rendering PDF
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // PDF states
   const [pdfDoc, setPdfDoc] = useState<PDFDocumentProxy | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [zoomLevel, setZoomLevel] = useState(1);
@@ -22,12 +26,17 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ url }) => {
   // load PDF
   useEffect(() => {
     const loadPdf = async () => {
+      if (!bookUrl || !bookId) {
+        setError("No book url provided");
+        return;
+      }
       try {
         // during loading, display loading text
         setLoading(true);
         setError(null);
-
-        const pdf = await pdfjsLib.getDocument(url).promise;
+        const decodedUrl = decodeURIComponent(bookUrl);
+        console.log(decodedUrl);
+        const pdf = await pdfjsLib.getDocument(decodedUrl).promise;
         setPdfDoc(pdf);
         await renderPage(pdf);
       } catch (error) {
@@ -39,8 +48,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ url }) => {
     };
     loadPdf();
     console.log(loading);
-    console.log(bookId);
-  }, [url]);
+  }, [bookUrl]);
 
   // rerender if current page or zoomLevel changes
   useEffect(() => {
@@ -162,6 +170,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ url }) => {
           )}
         </div>
       )}
+      <NoteArea currentPage={currentPage} bookId={Number(bookId)}></NoteArea>
     </>
   );
 };

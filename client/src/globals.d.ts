@@ -2,7 +2,7 @@ export interface User {
   userId: number;
   userName: string;
 }
-export interface NoteCard {
+export interface NoteInfo {
   page: number;
   index: number;
   content: string;
@@ -10,7 +10,9 @@ export interface NoteCard {
 }
 
 export interface BookInfo {
-  link: string;
-  author: string | null;
-  coverImg: string | null;
+  id: number;
+  title: string;
+  url: string;
+  // author: string | null;
+  // coverImg: string | null;
 }
