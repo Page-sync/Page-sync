@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
+// types
 import { NoteInfo } from "../globals";
+// helper
+import { sendDelete, sendPatch, sendPost } from "@/requestSender";
+// component
 import NoteCard from "./NoteCard";
 import SingleNote from "./SingleNote";
+// UI
 import { Button } from "./ui/button";
 
 interface NoteAreaProps {
@@ -14,6 +19,9 @@ const NoteArea: React.FC<NoteAreaProps> = ({ currentPage, bookId }) => {
   //   view: allNote | singleNote
   const [view, setView] = useState<string>("allNote");
   const [editNote, setEditNote] = useState<NoteInfo | null>(null);
+  const [onDeleteId, setOnDeleteId] = useState<number | null>(null);
+  const [onSave, setOnSave] = useState<boolean>(false);
+
   const sampleNotes: NoteInfo[] = [
     {
       id: 1,
@@ -31,12 +39,66 @@ const NoteArea: React.FC<NoteAreaProps> = ({ currentPage, bookId }) => {
     },
   ];
 
+  // Rerender to handle changes
+  //  get notes when page changes
   useEffect(() => {
     const fetchNotes = async () => {
       setNotes(sampleNotes);
     };
     fetchNotes();
   }, [currentPage]);
+
+  // rerender when delete notes
+  useEffect(() => {
+    //
+  }, [onDeleteId]);
+
+  useEffect(() => {
+    //
+  }, [onSave]);
+
+  const handleDeleteNote = async () => {
+    if (onDeleteId !== null) {
+      try {
+        const result = await sendDelete("/note", onDeleteId);
+        if (!result?.success) {
+          console.error("error during sending request");
+        }
+        // dynamically display error message or delete successful
+      } catch (error) {
+        // set error message
+        console.error(error);
+      } finally {
+        setOnDeleteId(null);
+      }
+    }
+  };
+  const handleSaveNote = async () => {
+    if (editNote && !onSave) {
+      setOnSave(true);
+      console.log(editNote);
+      try {
+        let result;
+        if (editNote.id) {
+          // check and get current use's id
+          result = await sendPatch("/note", 1, editNote);
+        } else {
+          result = await sendPost("/note", 1, editNote);
+        }
+        if (!result?.success) {
+          console.error("error during sending request");
+        }
+        // dynamically display error message or delete successful
+      } catch (error) {
+        console.error(error);
+        // set error message
+      } finally {
+        setOnSave(false);
+        setEditNote(null);
+      }
+    }
+  };
+
   return (
     <>
       <div>
@@ -63,6 +125,8 @@ const NoteArea: React.FC<NoteAreaProps> = ({ currentPage, bookId }) => {
                           noteInfo={note}
                           setView={setView}
                           setEditNote={setEditNote}
+                          setOnDeleteId={setOnDeleteId}
+                          handleDeleteNote={handleDeleteNote}
                         ></NoteCard>
                       );
                     })}
@@ -75,6 +139,9 @@ const NoteArea: React.FC<NoteAreaProps> = ({ currentPage, bookId }) => {
                 setView={setView}
                 editNote={editNote}
                 setEditNote={setEditNote}
+                onSave={onSave}
+                setOnSave={setOnSave}
+                handleSaveNote={handleSaveNote}
               />
             )}
           </div>

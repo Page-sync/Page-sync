@@ -14,11 +14,15 @@ interface NoteCardProps {
   noteInfo: NoteInfo;
   setView: Function;
   setEditNote: Function;
+  setOnDeleteId: Function;
+  handleDeleteNote: Function;
 }
 const NoteCard: React.FC<NoteCardProps> = ({
   noteInfo,
   setView,
   setEditNote,
+  setOnDeleteId,
+  handleDeleteNote,
 }) => {
   // if note info 's user id is current uer's id, it can be edit
   const editable = true;
@@ -28,14 +32,24 @@ const NoteCard: React.FC<NoteCardProps> = ({
         <CardTitle>Note</CardTitle>
         <CardContent>{noteInfo.content}</CardContent>
         {editable && (
-          <Button
-            onClick={() => {
-              setEditNote(noteInfo);
-              setView("singleNote");
-            }}
-          >
-            Edit
-          </Button>
+          <CardFooter>
+            <Button
+              onClick={() => {
+                setEditNote(noteInfo);
+                setView("singleNote");
+              }}
+            >
+              Edit
+            </Button>{" "}
+            <Button
+              onClick={() => {
+                handleDeleteNote();
+                setOnDeleteId(noteInfo.id);
+              }}
+            >
+              Delete
+            </Button>
+          </CardFooter>
         )}
       </Card>
     </>
