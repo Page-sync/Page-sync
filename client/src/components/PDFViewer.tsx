@@ -112,8 +112,8 @@ const PDFViewer: React.FC<PDFViewerProps> = ({}) => {
   return (
     <>
       <div className="flex-1 flex flex-row">
+        {/* PDFViewer */}
         <div className="flex-1 flex flex-col">
-          {/* PDFViewer */}
           {/* Top bar: */}
           <div className="h-16 border-b flex items-center justify-between px-4">
             {/* Page */}

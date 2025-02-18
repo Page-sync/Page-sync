@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 // types
 import { NoteInfo } from "../globals";
 // helper
-import { sendDelete, sendPatch, sendPost } from "@/requestSender";
+import { sendDelete, sendPatch, sendPost } from "@/helpers/requestSender";
 // component
 import NoteCard from "./NoteCard";
 import SingleNote from "./SingleNote";

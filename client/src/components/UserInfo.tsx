@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import avatar from "../assets/avatar.svg";
 interface UserInfoProps {
   // use NoteInfo
 }
@@ -14,7 +15,7 @@ const UserInfo: React.FC<UserInfoProps> = ({}) => {
       <nav className="space-y-2">
         <Button variant="ghost" className="w-full justify-start">
           <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+            <AvatarImage src={avatar} alt="Profile image" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
         </Button>

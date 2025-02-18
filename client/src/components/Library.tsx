@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 // import component
 import BookCard from "./BookCard";
+// import interface
+import { BookInfo } from "@/globals";
+// import helper
+import { sendGet } from "@/helpers/requestSender";
 // import ui
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
@@ -11,6 +15,7 @@ interface LibraryProps {
   setPdfUrl: Function;
 }
 const Library: React.FC<LibraryProps> = ({}) => {
+  const [fetchedBooks, setFetchedBooks] = useState();
   // assume books are fetched here
   const sampleBooks = [
     { id: 1, title: "Book 1", url: "/sample-book-1.pdf" },
@@ -22,7 +27,21 @@ const Library: React.FC<LibraryProps> = ({}) => {
     cover: "/api/placeholder/200/300",
     url: "/sample-book-1.pdf",
   });
-  useEffect(() => {}, []);
+  // get books
+
+  useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        const response = await sendGet("/books");
+        if (response?.success) {
+          setFetchedBooks(response.result);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchBook();
+  }, []);
   return (
     <>
       <div className="flex h-screen">
