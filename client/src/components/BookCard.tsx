@@ -14,8 +14,7 @@ interface BookCardProps {
 }
 const BookCard: React.FC<BookCardProps> = ({ bookInfo }) => {
   const clickRef = useRef<HTMLAnchorElement>(null);
-
-  const encodeBookdUrl = encodeURIComponent(bookInfo.url);
+  // const encodeBookdUrl = encodeURIComponent(bookInfo.url);
   return (
     <div>
       <Card
@@ -27,20 +26,27 @@ const BookCard: React.FC<BookCardProps> = ({ bookInfo }) => {
         }}
       >
         <div className="aspect-[2/3] bg-gray-200 mb-3">
-          <a
-            ref={clickRef}
-            href={`/book/?url=${encodeBookdUrl}&bookid=${bookInfo.id}`}
-            target="_blank"
-            rel="noopener  noreferrer"
-          ></a>
+          {bookInfo.isbn !== null ? (
+            <a
+              ref={clickRef}
+              href={`/book/?isbn=${bookInfo.isbn}&bookid=${bookInfo.id}`}
+              target="_blank"
+              rel="noopener  noreferrer"
+            ></a>
+          ) : (
+            <div>No isbn fund</div>
+          )}
+
+          {/*  href={`/book/?url=${bookInfo.isbn}&bookid=${bookInfo.id}`} */}
+          {/* TODO: onClick: query api for that url, and set url in href params , use isbn in viewer, query endpoint in viewer, then load url in viewer */}
           <img
-            src={bookInfo.cover}
+            src={bookInfo.thumbnail}
             alt={bookInfo.title}
             className="w-full h-full object-cover"
           />
         </div>
         <h3 className="font-medium text-sm">{bookInfo.title}</h3>
-        <p className="text-sm text-gray-500">{bookInfo.author}</p>
+        <p className="text-sm text-gray-500">{bookInfo.authors}</p>
       </Card>
     </div>
   );

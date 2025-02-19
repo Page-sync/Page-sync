@@ -10,11 +10,15 @@ export interface NoteInfo {
 }
 
 export interface BookInfo {
-  id: number;
+  id: string;
   title: string;
-  url: string;
-  cover: string;
-  author: string;
-  // author: string | null;
-  // coverImg: string | null;
+  authors: string[];
+  description: string;
+  thumbnail: string;
+  publishedDate: string;
+  pageCount: number;
+  categories: string[];
+  averageRating: number | null;
+  ratingsCount: number | null;
+  isbn: string;
 }

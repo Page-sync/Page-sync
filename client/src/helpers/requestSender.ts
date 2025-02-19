@@ -14,16 +14,17 @@ const sendGet = async (path: string, params?: object) => {
     }
     const urlString = url.toString();
     console.log(urlString);
-
     const response = await fetch(`${urlString}`, {
       method: "GET",
       credentials: "include",
     });
+    console.log(response);
     if (response.ok) {
       const result = await response.json();
       return { success: true, result: result };
     }
   } catch (error) {
+    console.error(error);
     throw error instanceof Error ? error : new Error("Get error");
   }
 };

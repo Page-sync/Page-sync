@@ -4,23 +4,27 @@ const rateLimit = require("express-rate-limit");
 const NodeCache = require("node-cache");
 const session = require("express-session");
 const cors = require("cors");
+const { Readable } = require("stream");
 
-// cache queried single book url for 1 hour
-const cache = new NodeCache({ stdTTL: 3600 });
 // import helpers:
 const {
   getGoogleBooks,
   getRandomBookSearchParam,
 } = require("./helpers/apiCall");
-//TODO:  Firebase
+
 dotenv.config();
+
+// cache queried single book url for 1 hour
+const cache = new NodeCache({ stdTTL: 3600 });
+
+//TODO:  Firebase
 const app = express();
 const PORT = process.env.PORT;
 
 // selective limit rate for endpoints that query outer api
 const strictLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  limit: 100,
+  limit: 10,
   message: "Too many requests from this IP. Try again later",
 });
 
@@ -86,7 +90,7 @@ app.get("/api/book/random", strictLimiter, async (req, res) => {
             )?.identifier || null,
         };
       });
-      return res.json({ bookArray: bookInfo }).status(200);
+      return res.json({ bookArray: bookInfo });
     }
   } catch (error) {
     console.error(error);
@@ -97,29 +101,63 @@ app.get("/api/book", strictLimiter, async (req, res) => {
   // 0573663203  test code
   try {
     const isbn = req.query.isbn;
+    if (!isbn || isbn.trim() === "") {
+      return res.status(400).json({
+        message: "No isbn provided",
+      });
+    }
     // look up in cache
-    const cachedUrl = cache.get(isbn);
-    if (cachedUrl) {
-      return res.status(200).json({ url: cachedUrl });
+    const normalizedIsbn = isbn.trim();
+    let downloadUrl = cache.get(normalizedIsbn);
+    // make cache rally work
+    console.log("first get cache", downloadUrl);
+    if (!downloadUrl) {
+      const url = `https://archive.org/advancedsearch.php?q=isbn:${isbn}&output=json`;
+      const response = await fetch(url);
+      console.log(response);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch download url of PDF`, response);
+      }
+      const data = await response.json();
+      if (!data.response.docs.length) {
+        throw new Error(`No accessable url of PDF found`, response);
+      }
+      const identifier = data.response.docs[0].identifier;
+      const pdfUrl = `https://archive.org/download/${identifier}/${identifier}.pdf`;
+      cache.set(isbn, pdfUrl);
+      downloadUrl = pdfUrl;
     }
-    const url = `https://archive.org/advancedsearch.php?q=isbn:${isbn}&output=json`;
-    const response = await fetch(url);
-    if (!response.ok) {
-      return res.status(404).json({
-        error: error,
-        message: "Could not fetch data from Internet Archive",
-      });
+    console.log(cache.get(normalizedIsbn));
+    //get stream of pdf for display:
+
+    const streamResponse = await fetch(downloadUrl);
+    if (!streamResponse.ok) {
+      throw new Error(`Failed to fetch PDF`, streamResponse);
     }
-    const data = await response.json();
-    if (!data.response.docs.length) {
-      return res.status(404).json({
-        message: "Could not find PDF by isbn in Internet Archive",
-      });
-    }
-    const identifier = data.response.docs[0].identifier;
-    const pdfUrl = `https://archive.org/download/${identifier}/${identifier}.pdf`;
-    cache.set(isbn, pdfUrl);
-    return res.json({ url: pdfUrl }).status(200);
+    const contentType =
+      streamResponse.headers.get("content-type") || "application/pdf";
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("Content-Disposition", `inline; filename="${isbn}.pdf"`);
+    const reader = streamResponse.body.getReader();
+    console.log(reader);
+    const stream = new ReadableStream({
+      async start(controller) {
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) {
+              controller.close();
+              break;
+            }
+            controller.enqueue(value);
+          }
+        } catch (error) {
+          controller.error(error);
+        }
+      },
+    });
+    const nodeReadable = Readable.fromWeb(stream);
+    nodeReadable.pipe(res);
   } catch (error) {
     console.error(error);
     return res

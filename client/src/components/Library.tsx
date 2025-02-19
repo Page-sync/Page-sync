@@ -15,26 +15,22 @@ interface LibraryProps {
   setPdfUrl: Function;
 }
 const Library: React.FC<LibraryProps> = ({}) => {
-  const [fetchedBooks, setFetchedBooks] = useState();
+  const [fetchedBooks, setFetchedBooks] = useState<BookInfo[]>();
   // assume books are fetched here
   const sampleBooks = [
     { id: 1, title: "Book 1", url: "/sample-book-1.pdf" },
     { id: 2, title: "Book 2", url: "/sample-book-2.pdf" },
   ];
-  const books = Array(8).fill({
-    title: "Sample Book",
-    author: "Author Name",
-    cover: "/api/placeholder/200/300",
-    url: "/sample-book-1.pdf",
-  });
+
   // get books
 
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const response = await sendGet("/books");
+        const response = await sendGet("/book/random");
         if (response?.success) {
-          setFetchedBooks(response.result);
+          console.log(response.result);
+          setFetchedBooks(response.result.bookArray);
         }
       } catch (error) {
         console.error(error);
@@ -63,9 +59,10 @@ const Library: React.FC<LibraryProps> = ({}) => {
           {/* Books Grid Area */}
           <div className="flex-1 p-6 bg-gray-50 overflow-auto">
             <div className="grid grid-cols-4 gap-6">
-              {books.map((book, idx) => (
-                <BookCard key={idx} bookInfo={book}></BookCard>
-              ))}
+              {fetchedBooks &&
+                fetchedBooks.map((book, idx) => (
+                  <BookCard key={idx} bookInfo={book}></BookCard>
+                ))}
             </div>
           </div>
         </div>

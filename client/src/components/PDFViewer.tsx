@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 // import component
 import NoteArea from "./NoteArea";
+import { sendGet } from "@/helpers/requestSender";
 // import css component
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
@@ -20,12 +21,15 @@ import { PDFDocumentProxy } from "pdfjs-dist";
 //import worker config file
 import { initializePDFWorker } from "../lib/pdf.worker";
 initializePDFWorker();
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 interface PDFViewerProps {}
 
 const PDFViewer: React.FC<PDFViewerProps> = ({}) => {
   const [searchParams] = useSearchParams();
-  const bookUrl = searchParams.get("url");
+  const [bookUrl, setBookUrl] = useState<string>();
   const bookId = searchParams.get("bookid");
+  const isbn = searchParams.get("isbn");
   // canvas emelent used for rendering PDF
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // PDF states
@@ -36,20 +40,23 @@ const PDFViewer: React.FC<PDFViewerProps> = ({}) => {
   const [error, setError] = useState<string | null>(null);
   // load PDF
   useEffect(() => {
+    setBookUrl(`${BASE_URL}/book?isbn=${isbn}`);
+  }, []);
+  useEffect(() => {
     const loadPdf = async () => {
-      if (!bookUrl || !bookId) {
+      if (!(isbn && bookId && bookUrl)) {
         setError("No book url provided");
         return;
       }
       try {
-        // during loading, display loading text
-        setLoading(true);
-        setError(null);
-        const decodedUrl = decodeURIComponent(bookUrl);
-        console.log(decodedUrl);
-        const pdf = await pdfjsLib.getDocument(decodedUrl).promise;
-        setPdfDoc(pdf);
-        await renderPage(pdf);
+        if (bookUrl) {
+          // during loading, display loading text
+          setLoading(true);
+          setError(null);
+          const pdf = await pdfjsLib.getDocument(bookUrl).promise;
+          setPdfDoc(pdf);
+          await renderPage(pdf);
+        }
       } catch (error) {
         console.error("Error during loading pdf", error);
         setError("Error during loading pdf");

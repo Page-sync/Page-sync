@@ -52,7 +52,8 @@ const getRandomBookSearchParam = (count = 10) => {
     searchTerms[Math.floor(Math.random() * searchTerms.length)];
   const startIndex = Math.floor(Math.random() * 100); // Google Books API max is 100
   const searchParams = {
-    q: randomTerm,
+    q: `${randomTerm}`,
+    filter: "ebooks",
     maxResults: count,
     startIndex: startIndex,
     orderBy: "relevance", // Can be 'relevance' or 'newest'

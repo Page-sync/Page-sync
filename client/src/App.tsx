@@ -22,11 +22,11 @@ function App() {
 
   useEffect(() => {
     // pdf url depend on book card be clicked
-    const tester = async () => {
-      const result = await sendGet("");
-      console.log(result);
-    };
-    tester();
+    // const tester = async () => {
+    //   const result = await sendGet("");
+    //   console.log(result);
+    // };
+    // tester();
   }, []);
   return (
     <div className="h-screen w-full flex">
