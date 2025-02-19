@@ -32,7 +32,7 @@ const BookCard: React.FC<BookCardProps> = ({ bookInfo }) => {
   return (
     <div>
       <Card
-        className="flex flex-col p-4 hover:shadow-lg transition-shadow h-48 w-24 overflow-auto"
+        className="flex flex-col p-4 hover:shadow-lg transition-shadow h-48 w-36 overflow-auto"
         onClick={() => {
           if (clickRef.current) {
             clickRef.current.click();

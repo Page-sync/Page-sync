@@ -17,7 +17,6 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ setCurrentBook }) => {
-  const [searchText, setSearchText] = useState<string>();
   const searchRef = useRef<HTMLInputElement>(null);
 
   const handleSearch = async () => {
