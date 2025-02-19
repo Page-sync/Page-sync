@@ -5,7 +5,7 @@ const { strictLimiter } = require("../middleware/rateLimiter");
 const {
   getGoogleBooks,
   getRandomBookSearchParam,
-} = require("./helpers/bookUtils");
+} = require("../helpers/bookUtils");
 const GOOGLE_BOOKS_URL = process.env.GOOGLE_BOOKS_URL;
 // cache
 const NodeCache = require("node-cache");
@@ -14,7 +14,6 @@ const cache = new NodeCache({ stdTTL: 3600 });
 // ---------- books ----------
 router.get("/random", strictLimiter, async (req, res) => {
   const randomSearchParam = getRandomBookSearchParam(20);
-
   try {
     const result = await getGoogleBooks(randomSearchParam);
     if (result?.items) {
@@ -39,7 +38,6 @@ router.get("/random", strictLimiter, async (req, res) => {
           };
         })
         .filter((book) => book.isbn !== null);
-      console.log(bookInfo);
       return res.json(bookInfo);
     }
   } catch (error) {
