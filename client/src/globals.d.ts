@@ -14,7 +14,7 @@ export interface BookInfo {
   title: string;
   authors: string[];
   description: string;
-  thumbnail: string;
+  thumbnail: { smallThumbnail: string; thumbnail: string };
   publishedDate: string;
   pageCount: number;
   categories: string[];

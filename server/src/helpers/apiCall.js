@@ -7,6 +7,7 @@ const GOOGLE_BOOKS_URL = process.env.GOOGLE_BOOKS_URL;
 
 //send get request helper: fetch google book
 const getGoogleBooks = async (params) => {
+  console.log(params);
   try {
     const url = new URL(`${GOOGLE_BOOKS_URL}`);
     url.searchParams.append("key", GOOGLE_BOOKS_KEY);
@@ -18,7 +19,9 @@ const getGoogleBooks = async (params) => {
       });
     }
     const urlString = url.toString();
+    console.log(urlString);
     const response = await fetch(`${urlString}`);
+    console.log(response);
     if (response.ok) {
       const books = await response.json();
       return books;

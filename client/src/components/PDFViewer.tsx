@@ -28,7 +28,7 @@ interface PDFViewerProps {}
 const PDFViewer: React.FC<PDFViewerProps> = ({}) => {
   const [searchParams] = useSearchParams();
   const [bookUrl, setBookUrl] = useState<string>();
-  const bookId = searchParams.get("bookid");
+  const id = searchParams.get("id");
   const isbn = searchParams.get("isbn");
   // canvas emelent used for rendering PDF
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -44,7 +44,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({}) => {
   }, []);
   useEffect(() => {
     const loadPdf = async () => {
-      if (!(isbn && bookId && bookUrl)) {
+      if (!(isbn && id && bookUrl)) {
         setError("No book url provided");
         return;
       }
@@ -211,10 +211,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({}) => {
           </div>
         </div>
         <div className="w-64 border-l bg-white p-4">
-          <NoteArea
-            currentPage={currentPage}
-            bookId={Number(bookId)}
-          ></NoteArea>
+          <NoteArea currentPage={currentPage} id={id}></NoteArea>
         </div>
       </div>
     </>

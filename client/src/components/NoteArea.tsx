@@ -2,7 +2,12 @@ import { useEffect, useState } from "react";
 // types
 import { NoteInfo } from "../globals";
 // helper
-import { sendDelete, sendPatch, sendPost } from "@/helpers/requestSender";
+import {
+  sendDelete,
+  sendGet,
+  sendPatch,
+  sendPost,
+} from "@/helpers/requestSender";
 // component
 import NoteCard from "./NoteCard";
 import SingleNote from "./SingleNote";
@@ -12,9 +17,9 @@ import { Button } from "./ui/button";
 interface NoteAreaProps {
   // use NoteInfo
   currentPage: number;
-  bookId: number;
+  id: string | null;
 }
-const NoteArea: React.FC<NoteAreaProps> = ({ currentPage, bookId }) => {
+const NoteArea: React.FC<NoteAreaProps> = ({ currentPage, id }) => {
   const [notes, setNotes] = useState<NoteInfo[]>();
   //   view: allNote | singleNote
   const [view, setView] = useState<string>("allNote");
@@ -43,6 +48,7 @@ const NoteArea: React.FC<NoteAreaProps> = ({ currentPage, bookId }) => {
   //  get notes when page changes
   useEffect(() => {
     const fetchNotes = async () => {
+      // sendGet('/note', {page:currentPage})
       setNotes(sampleNotes);
     };
     fetchNotes();
