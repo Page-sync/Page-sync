@@ -34,17 +34,15 @@ app.use(
   })
 );
 
+// routes
 app.use("/", require("./routes/index"));
 app.use("/auth", require("./routes/auth"));
 app.use("/api/book", require("./routes/book"));
-// TODO:refactor app into routes
+app.use("/api/note", require("./routes/note"));
+app.use("/api/user", require("./routes/user"));
+
 app.get("/api", (req, res) => {
   res.send({ message: "connected" }).status(200);
-});
-
-// ---------- notes ----------
-app.get("/note", async (req, res) => {
-  //
 });
 
 app.listen(PORT, () => {
