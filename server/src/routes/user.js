@@ -2,20 +2,26 @@ const express = require("express");
 const router = express.Router();
 const supabase = require("../supabaseClient");
 const { authenticateUser } = require("../middleware/auth");
-// get user's all reading historys
 router.use(authenticateUser);
+
+// get user's all reading historys
 router.get("/history", async (req, res) => {
   try {
     const { user } = req.user;
+    const { userData, userError } = await supabase
+      .from("users")
+      .select("id")
+      .eq("authid", user.id);
+    if (userError) throw userError;
     const { data, error } = await supabase
       .from("history")
       .select()
-      .eq("userid", user.id);
+      .eq("userid", userData[0].id);
     if (error) throw error;
     res.status(200).json({
       message: "Create new note successful.",
       history: data.map((history) => {
-        return { isbn: history.isbn, page: history.page };
+        return { isbn: history.isbn, page: history.page, id: history.id };
       }),
     });
   } catch (error) {
@@ -29,10 +35,19 @@ router.post("/history", async (req, res) => {
   try {
     // note: title, content, page, isbn, no note.id
     const { user, history } = req.body;
+    const { userData, userError } = await supabase
+      .from("users")
+      .select("id")
+      .eq("authid", user.id);
+    if (userError) throw userError;
     // insert note into note table
     const { data, error } = await supabase
       .from("history")
-      .upsert({ userid: user.id, isbn: history.isbn, page: history.page })
+      .insert({
+        userid: userData[0].id,
+        isbn: history.isbn,
+        page: history.page,
+      })
       .select("id");
 
     if (error) throw error;
@@ -54,6 +69,7 @@ router.patch("/history", async (req, res) => {
     // is a user already have history to a book, update the page instead of creating a new history
     // note: title, content, page, isbn, note.id
     const { user, history } = req.body;
+
     const { data, error } = await supabase
       .from("history")
       .update({
