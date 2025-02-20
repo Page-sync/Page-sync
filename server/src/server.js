@@ -24,7 +24,7 @@ app.use(
 app.use(
   cors({
     origin: [
-      //   "https://frontend- Projet name .onrender.com",
+      "https://page-sync-1.onrender.com",
       "http://localhost:5173",
       "http://localhost:5174",
       "http://localhost:4173",
@@ -35,8 +35,8 @@ app.use(
 );
 
 // routes
-app.use("/", require("./routes/index"));
-app.use("/auth", require("./routes/auth"));
+app.use("/api", require("./routes/index"));
+app.use("/api/auth", require("./routes/auth"));
 app.use("/api/book", require("./routes/book"));
 app.use("/api/note", require("./routes/note"));
 app.use("/api/user", require("./routes/user"));
