@@ -5,24 +5,28 @@ const supabase = require("../supabaseClient");
 // Sign Up
 router.post("/signup", async (req, res) => {
   try {
-    const { email, password, username } = req.body;
-    // belike: knex.insert, but insert to a special user table
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-    if (error) throw error;
-    // insert user into DB
-    const { dbData, dbError } = await supabase
-      .from("user")
-      .insert({ email: email, name: username, authid: data.user.id })
+    const { email, userid } = req.body;
+    const { data, error } = await supabase
+      .from("users")
+      .insert({ email: email, authid: userid })
       .select();
-    if (dbError) throw dbError;
+    if (error) {
+      console.error("Supabase insert error:", error);
+      return res.status(500).json({
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint,
+        fullError: JSON.stringify(error),
+      });
+    }
+    console.log(data);
     res.status(200).json({
       message: "Signup successful! Please check your email for confirmation.",
-      user: { emailL: email, username: username, id: data.user.id },
+      user: { email: data[0].email, id: data[0].authid },
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       error: error.message,
     });
@@ -56,12 +60,8 @@ router.post("/signin", async (req, res) => {
 router.post("/signout", async (req, res) => {
   try {
     const { error } = await supabase.auth.signOut();
-
     if (error) throw error;
-
-    // Clear the session
     req.session.destroy();
-
     res.status(200).json({
       message: "Signout successful!",
     });
@@ -116,21 +116,28 @@ router.get("/user", async (req, res) => {
   }
 });
 // Set session from client after OAuth redirect
-router.post("/set-session", (req, res) => {
+router.post("/set-session", async (req, res) => {
   try {
     const { user, accessToken } = req.body;
-    if (!user || !accessToken) {
+    if (!user) {
       return res.status(400).json({
         error: "Invalid request",
       });
     }
+    const { data, error } = await supabase.auth.getUser(accessToken);
+    if (error || !data.user) {
+      return res.status(401).json({ error: "Invalid token" });
+    }
     // Set session
-    req.session.user = user;
-    req.session.accessToken = accessToken;
+    req.session.user = {
+      userid: data.user.id,
+      email: data.user.email,
+    };
     res.status(200).json({
       message: "Session created successfully",
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       error: error.message,
     });

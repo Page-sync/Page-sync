@@ -1,12 +1,22 @@
 export interface User {
-  userId: number;
-  userName: string;
+  userid: string;
+  email: string;
 }
 export interface NoteInfo {
   id: number;
+  userid: string;
   page: number;
+  isbn: string;
+  title: string | null;
   content: string;
-  author: User;
+}
+export interface History {
+  id: number;
+  page: number;
+  isbn: string;
+  create_at: string | null;
+  update_at: string | null;
+  userid: string;
 }
 
 export interface BookInfo {

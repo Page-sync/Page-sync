@@ -14,18 +14,19 @@ interface NoteCardProps {
   noteInfo: NoteInfo;
   setView: Function;
   setEditNote: Function;
-  setOnDeleteId: Function;
+  setOnDeleteNote: Function;
   handleDeleteNote: Function;
 }
 const NoteCard: React.FC<NoteCardProps> = ({
   noteInfo,
   setView,
   setEditNote,
-  setOnDeleteId,
+  setOnDeleteNote,
   handleDeleteNote,
 }) => {
   // if note info 's user id is current uer's id, it can be edit
   const editable = true;
+
   return (
     <>
       <Card>
@@ -43,8 +44,7 @@ const NoteCard: React.FC<NoteCardProps> = ({
             </Button>{" "}
             <Button
               onClick={() => {
-                handleDeleteNote();
-                setOnDeleteId(noteInfo.id);
+                handleDeleteNote(noteInfo);
               }}
             >
               Delete

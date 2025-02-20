@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
 });
 // TODO-future: confirm note editable or not from backend, prevent user from editing others'notes
 // create new note
-router.post("/", authenticateUser, async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     // note: title, content, page, isbn, no note.id
     const { user, note } = req.body;
@@ -68,7 +68,7 @@ router.post("/", authenticateUser, async (req, res) => {
 });
 
 // edit note
-router.patch("/", authenticateUser, async (req, res) => {
+router.patch("/", async (req, res) => {
   try {
     // note: title, content, page, isbn, note.id
     const { user, note } = req.body;
@@ -92,7 +92,7 @@ router.patch("/", authenticateUser, async (req, res) => {
 });
 
 // delete note
-router.delete("/", authenticateUser, async (req, res) => {
+router.delete("/", async (req, res) => {
   try {
     const { user, note } = req.body;
     const { data, error } = await supabase

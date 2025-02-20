@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-// types
 import { NoteInfo } from "../globals";
-// helper
 import {
   sendDelete,
   sendGet,
@@ -11,7 +9,6 @@ import {
 // component
 import NoteCard from "./NoteCard";
 import SingleNote from "./SingleNote";
-// UI
 import { Button } from "./ui/button";
 
 interface NoteAreaProps {
@@ -19,28 +16,32 @@ interface NoteAreaProps {
   currentPage: number;
   id: string | null;
 }
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 const NoteArea: React.FC<NoteAreaProps> = ({ currentPage, id }) => {
   const [notes, setNotes] = useState<NoteInfo[]>();
   //   view: allNote | singleNote
   const [view, setView] = useState<string>("allNote");
   const [editNote, setEditNote] = useState<NoteInfo | null>(null);
-  const [onDeleteId, setOnDeleteId] = useState<number | null>(null);
+  const [onDeleteNote, setOnDeleteNote] = useState<NoteInfo | null>(null);
   const [onSave, setOnSave] = useState<boolean>(false);
 
   const sampleNotes: NoteInfo[] = [
     {
       id: 1,
       page: 2,
-
+      isbn: "0573663203",
       content: "Notes",
-      author: { userId: 1, userName: "user's naem" },
+      userid: "",
+      title: "",
     },
     {
       id: 2,
       page: 2,
-
+      isbn: "0573663203",
+      userid: "",
       content: "Notes 2",
-      author: { userId: 1, userName: "user's naem" },
+      title: "",
     },
   ];
 
@@ -57,16 +58,16 @@ const NoteArea: React.FC<NoteAreaProps> = ({ currentPage, id }) => {
   // rerender when delete notes
   useEffect(() => {
     //
-  }, [onDeleteId]);
+  }, [onDeleteNote]);
 
   useEffect(() => {
     //
   }, [onSave]);
 
-  const handleDeleteNote = async () => {
-    if (onDeleteId !== null) {
+  const handleDeleteNote = async (note: NoteInfo) => {
+    if (note !== null) {
       try {
-        const result = await sendDelete("/note", onDeleteId);
+        const result = await sendDelete(`${BASE_URL}/note`, note);
         if (!result?.success) {
           console.error("error during sending request");
         }
@@ -75,7 +76,7 @@ const NoteArea: React.FC<NoteAreaProps> = ({ currentPage, id }) => {
         // set error message
         console.error(error);
       } finally {
-        setOnDeleteId(null);
+        setOnDeleteNote(null);
       }
     }
   };
@@ -87,9 +88,9 @@ const NoteArea: React.FC<NoteAreaProps> = ({ currentPage, id }) => {
         let result;
         if (editNote.id) {
           // check and get current use's id
-          result = await sendPatch("/note", 1, editNote);
+          result = await sendPatch(`${BASE_URL}/note`, editNote);
         } else {
-          result = await sendPost("/note", 1, editNote);
+          result = await sendPost(`${BASE_URL}/note`, editNote);
         }
         if (!result?.success) {
           console.error("error during sending request");
@@ -110,7 +111,6 @@ const NoteArea: React.FC<NoteAreaProps> = ({ currentPage, id }) => {
       <div>
         All Notes
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold">Properties</h2>
           <div className="space-y-2">
             {view === "allNote" && (
               <div>
@@ -131,7 +131,7 @@ const NoteArea: React.FC<NoteAreaProps> = ({ currentPage, id }) => {
                           noteInfo={note}
                           setView={setView}
                           setEditNote={setEditNote}
-                          setOnDeleteId={setOnDeleteId}
+                          setOnDeleteNote={setOnDeleteNote}
                           handleDeleteNote={handleDeleteNote}
                         ></NoteCard>
                       );

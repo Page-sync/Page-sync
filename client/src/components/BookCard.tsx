@@ -39,7 +39,7 @@ const BookCard: React.FC<BookCardProps> = ({ bookInfo }) => {
           }
         }}
       >
-        <div className="aspect-[2/3] bg-gray-200 mb-3">
+        <div className="aspect-[2/3] bg-gray-200 mb-3 relative">
           {bookInfo.isbn !== null ? (
             <a
               ref={clickRef}
@@ -50,7 +50,15 @@ const BookCard: React.FC<BookCardProps> = ({ bookInfo }) => {
           ) : (
             <div>No isbn fund</div>
           )}
-          <img src={imageUrl} alt={bookInfo.title} crossOrigin="anonymous" />
+          <span className="absolute inset-x-0 top-0 p-4 text-gray-800 font-medium z-10 bg-white/80">
+            {bookInfo.title}
+          </span>
+          <img
+            src={imageUrl}
+            alt={bookInfo.title}
+            crossOrigin="anonymous"
+            className="w-full h-full object-cover"
+          />
         </div>
         <h3 className="font-medium text-sm">{bookInfo.title}</h3>
         <p className="text-sm text-gray-500">{bookInfo.authors}</p>

@@ -10,7 +10,6 @@ import { sendGet } from "@/helpers/requestSender";
 import { Card } from "./ui/card";
 import defaultCover from "../assets/book-cover.svg";
 interface LibraryProps {
-  // availableBooks Book[]
   setPdfUrl: Function;
 }
 const Library: React.FC<LibraryProps> = ({}) => {
@@ -92,7 +91,7 @@ const Library: React.FC<LibraryProps> = ({}) => {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <h3 className="font-semibold">Book Title</h3>
+                  <h3 className="font-semibold">Your book is found!</h3>
                   <p className="text-sm text-gray-500">Author Name</p>
                   <p className="text-sm text-gray-600">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
@@ -114,7 +113,7 @@ const Library: React.FC<LibraryProps> = ({}) => {
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm font-medium">ISBN</p>
-                  <p className="text-sm text-gray-600">978-3-16-148410-0</p>
+                  <p className="text-sm text-gray-600">{currentBook.isbn}</p>
                 </div>
               </div>
             </div>

@@ -10,7 +10,7 @@ const authenticateUser = async (req, res, next) => {
     }
     // Verify token is still valid
     const { data, error } = await supabase.auth.getUser(
-      req.session.accessToken
+      req.session.access_oken
     );
     if (error || !data.user) {
       req.session.destroy();

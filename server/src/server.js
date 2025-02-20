@@ -39,7 +39,7 @@ app.use("/api", require("./routes/index"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/book", require("./routes/book"));
 app.use("/api/note", require("./routes/note"));
-app.use("/api/user", require("./routes/user"));
+app.use("/api/user", require("./routes/history"));
 
 app.get("/api", (req, res) => {
   res.send({ message: "connected" }).status(200);

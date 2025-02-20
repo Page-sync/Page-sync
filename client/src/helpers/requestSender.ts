@@ -29,14 +29,14 @@ const sendGet = async (path: string, params?: object) => {
   }
 };
 
-const sendPost = async (path: string, id: number, content: object) => {
+const sendPost = async (path: string, body?: object) => {
   try {
     // check current user in session?
-    const response = await fetch(`${BASE_URL}${path}/id=${id}`, {
+    const response = await fetch(`${path}`, {
       method: "POST",
       credentials: "include",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify(content),
+      body: JSON.stringify(body),
     });
     if (response.ok) {
       const result = await response.json();
@@ -46,11 +46,12 @@ const sendPost = async (path: string, id: number, content: object) => {
     throw error instanceof Error ? error : new Error("Post error");
   }
 };
-const sendDelete = async (path: string, id: number) => {
+const sendDelete = async (path: string, body?: object) => {
   try {
-    const response = await fetch(`${BASE_URL}${path}/id=${id}`, {
+    const response = await fetch(`${path}`, {
       method: "DELETE",
       credentials: "include",
+      body: JSON.stringify(body),
     });
     if (response.ok) {
       const result = await response.json();
@@ -61,13 +62,13 @@ const sendDelete = async (path: string, id: number) => {
   }
 };
 
-const sendPatch = async (path: string, id: number, content: object) => {
+const sendPatch = async (path: string, body?: object) => {
   try {
-    const response = await fetch(`${BASE_URL}${path}/id=${id}`, {
+    const response = await fetch(`${path}`, {
       method: "PATCH",
       credentials: "include",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify(content),
+      body: JSON.stringify(body),
     });
     if (response.ok) {
       const result = await response.json();
