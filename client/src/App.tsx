@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import interfaces
-import { User, BookInfo } from "./globals";
 // import auth
 //import components
 import PDFViewer from "./components/PDFViewer";
@@ -10,7 +9,6 @@ import UserInfo from "./components/UserInfo";
 
 function App() {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
-  const [currentBook, setCurrentBook] = useState<BookInfo>();
 
   useEffect(() => {
     // pdf url depend on book card be clicked

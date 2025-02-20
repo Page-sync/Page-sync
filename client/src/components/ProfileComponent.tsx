@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import avatar from "../assets/avatar.svg"; // Make sure this path is correct
-import { User } from "@/globals";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "../SupabaseClient";
 

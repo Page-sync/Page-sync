@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { NoteInfo } from "../globals";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
@@ -8,7 +8,6 @@ interface SingleNoteProps {
   editNote: NoteInfo | null;
   setEditNote: Function;
   onSave: boolean;
-  // change save btn
   setOnSave: Function;
   handleSaveNote: Function;
 }
@@ -16,13 +15,13 @@ const SingleNote: React.FC<SingleNoteProps> = ({
   setView,
   editNote,
   setEditNote,
+  onSave,
   setOnSave,
   handleSaveNote,
 }) => {
-  const [currentText, setCurrentText] = useState<string>();
-  const [onSave, setAutoSave] = useState(false);
-
-  useEffect(() => {}, [editNote]);
+  useEffect(() => {
+    setOnSave(false);
+  }, [editNote]);
   // will include more features like comment or discussion
   return (
     <>

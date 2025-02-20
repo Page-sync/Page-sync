@@ -1,13 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { BookInfo } from "../globals";
 
-import {
-  Card,
-  CardMedia,
-  Typography,
-  Box,
-  CircularProgress,
-} from "@mui/material";
+import { Card } from "@mui/material";
 import defaultCover from "../assets/book-cover.svg";
 interface BookCardProps {
   // use BookInfo
@@ -20,12 +14,11 @@ const BookCard: React.FC<BookCardProps> = ({ bookInfo }) => {
   const clickRef = useRef<HTMLAnchorElement>(null);
   // const encodeBookdUrl = encodeURIComponent(bookInfo.url);
   const [imageUrl, setImageUrl] = useState<string>();
-  const [isLoading, setIsLoading] = useState<boolean>();
-  const [error, setError] = useState<string>();
+  // const [isLoading, setIsLoading] = useState<boolean>();
+  // const [error, setError] = useState<string>();
 
   useEffect(() => {
     // Construct Google Books cover URL
-    const openLibraryCover = `https://covers.openlibrary.org/b/isbn/${bookInfo.isbn}-L.jpg`;
     setImageUrl(defaultCover);
   }, [bookInfo]);
 

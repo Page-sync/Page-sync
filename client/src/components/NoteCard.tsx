@@ -1,14 +1,6 @@
-import { useState } from "react";
 import { NoteInfo } from "../globals";
 import { Button } from "./ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
+import { Card, CardContent, CardFooter, CardTitle } from "./ui/card";
 interface NoteCardProps {
   // use NoteInfo
   noteInfo: NoteInfo;
@@ -21,7 +13,6 @@ const NoteCard: React.FC<NoteCardProps> = ({
   noteInfo,
   setView,
   setEditNote,
-  setOnDeleteNote,
   handleDeleteNote,
 }) => {
   // if note info 's user id is current uer's id, it can be edit

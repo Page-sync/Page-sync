@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import { NoteInfo } from "../globals";
-import {
-  sendDelete,
-  sendGet,
-  sendPatch,
-  sendPost,
-} from "@/helpers/requestSender";
+import { sendDelete, sendPatch, sendPost } from "@/helpers/requestSender";
 // component
 import NoteCard from "./NoteCard";
 import SingleNote from "./SingleNote";
@@ -18,7 +13,7 @@ interface NoteAreaProps {
 }
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-const NoteArea: React.FC<NoteAreaProps> = ({ currentPage, id }) => {
+const NoteArea: React.FC<NoteAreaProps> = ({ currentPage }) => {
   const [notes, setNotes] = useState<NoteInfo[]>();
   //   view: allNote | singleNote
   const [view, setView] = useState<string>("allNote");

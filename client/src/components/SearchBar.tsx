@@ -1,15 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 // import component
-import BookCard from "./BookCard";
 // import interface
 import { BookInfo } from "@/globals";
 // import helper
-import { sendGet } from "@/helpers/requestSender";
 // import ui
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { Card } from "./ui/card";
-import { Search, Filter, Component } from "lucide-react";
+import { Search, Filter } from "lucide-react";
 interface SearchBarProps {
   // availableBooks Book[]
   currentBook: BookInfo | null;

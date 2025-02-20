@@ -1,5 +1,3 @@
-import { json } from "stream/consumers";
-
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const sendGet = async (path: string, params?: object) => {

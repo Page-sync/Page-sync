@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { User } from "@/globals";
-import { Session, SupabaseClient } from "@supabase/supabase-js";
+import { Session } from "@supabase/supabase-js";
 import { supabase } from "../SupabaseClient";
 
 const AuthComponent: React.FC<{
   session: Session | null;
-}> = ({ session }) => {
+}> = () => {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
@@ -148,6 +148,16 @@ const AuthComponent: React.FC<{
             : "Already have an account? Login"}
         </Button>
       </div>
+      {loading && (
+        <div>
+          <span>On loading...</span>
+        </div>
+      )}
+      {error && (
+        <div>
+          <span>An error happend...</span>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,20 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 // import component
 import NoteArea from "./NoteArea";
-import { sendGet } from "@/helpers/requestSender";
 // import css component
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Settings,
-  ZoomIn,
-  ZoomOut,
-  RotateCw,
-  Search,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from "lucide-react";
 //import pdfjs
 import * as pdfjsLib from "pdfjs-dist";
 import { PDFDocumentProxy } from "pdfjs-dist";
