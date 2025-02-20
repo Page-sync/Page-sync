@@ -7,12 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./src/server.js",
     "express-dev": "dotenvx run -- nodemon ./src/server.js",
-    "build": "npm install && npm install express && npm run migrate-latest && npm run seed-data || exit 1",
-    "migrate:make": "knex migrate:make --knexfile knexfile.js --migrations-directory ./db/migrations",
-    "migrate-latest": "npx knex migrate:latest --knexfile knexfile.js",
-    "seed-data": "npx knex seed:run --knexfile knexfile.js",
-    "make-seed": "npx knex seed:make",
-    "migrate-down": "knex migrate:rollback --knexfile knexfile.js"
+    "build": "npm install && npm install express || exit 1"
   },
   "repository": {
     "type": "git",
@@ -26,7 +21,6 @@
     "express": "^4.21.2",
     "express-rate-limit": "^7.5.0",
     "express-session": "^1.18.1",
-    "knex": "^2.5.1",
     "node-cache": "^5.1.2",
     "nodemon": "^3.1.9",
     "pg": "^8.11.3"

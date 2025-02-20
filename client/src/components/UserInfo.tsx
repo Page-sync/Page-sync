@@ -16,7 +16,6 @@ const UserInfo: React.FC<UserInfoProps> = ({}) => {
         <Button variant="ghost" className="w-full justify-start">
           <Avatar>
             <AvatarImage src={avatar} alt="Profile image" />
-            <AvatarFallback>CN</AvatarFallback>
           </Avatar>
         </Button>
       </nav>
