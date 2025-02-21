@@ -1,6 +1,6 @@
 # Page-Sync
 
-A platform that enables users to search books by ISBN, access expert annotations, take notes, and engage in meaningful discussions. The platform brings together students, professionals, and experts to share insights and perspectives across different fields.
+A platform that enables users to search books by ISBN, access notes by page annotations, take notes, and engage in meaningful discussions. The platform brings together students, professionals, and experts to share insights and perspectives across different fields.
 
 ## Features
 
